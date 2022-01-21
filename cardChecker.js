@@ -20,90 +20,96 @@ const mystery4 = [4, 9, 2, 9, 8, 7, 7, 1, 6, 9, 2, 1, 7, 0, 9, 3];
 const mystery5 = [4, 9, 1, 3, 5, 4, 0, 4, 6, 3, 0, 7, 2, 5, 2, 3];
 
 // An array of all the arrays above
-const batch = [valid1, valid2, valid3, valid4, valid5, invalid1, invalid2, invalid3, invalid4, invalid5, mystery1, mystery2, mystery3, mystery4, mystery5];
-
+const batch = [
+  valid1,
+  valid2,
+  valid3,
+  valid4,
+  valid5,
+  invalid1,
+  invalid2,
+  invalid3,
+  invalid4,
+  invalid5,
+  mystery1,
+  mystery2,
+  mystery3,
+  mystery4,
+  mystery5,
+];
 
 // Add your functions below:
+const validateCard = (a) => {
+  let lastDigit = a.slice(-1)[0];
+  //console.log(lastDigit);
+  let tempArray = a.slice(0, -1);
+  let reversedArray = tempArray.reverse().map((x) => parseInt(x));
+  //console.log(reversedArray);
 
-let invalidCards = [];
-
-const validateCard = (array1) => {
-    let lastDigit = array1.slice(-1)[0];
-    //console.log(lastDigit);
-    let tempArray = array1.slice(0, -1);
-    let reversedArray = tempArray.reverse().map(x => parseInt(x));
-    //console.log(reversedArray);
-
-    let sum = reversedArray.reduce(
-        (acc, val, i) => (i % 2 !== 0 ? acc + val : acc + ((val *= 2) > 9 ? val - 9 : val)),
-        0
-      );
-      sum += lastDigit;
-      let answer = sum % 10 === 0;
-      if(answer == true){
-      	//console.log(`This card is valid`);
-        return true
-      } else {
-      	//console.log(`This card is invalid.`)
-        return false
-      }
+  let sum = reversedArray.reduce(
+    (acc, val, i) =>
+      i % 2 !== 0 ? acc + val : acc + ((val *= 2) > 9 ? val - 9 : val),
+    0
+  );
+  sum += lastDigit;
+  let answer = sum % 10 === 0;
+  if (answer == true) {
+    //console.log(`This card is valid`);
+    return true;
+  } else {
+    //console.log(`This card is invalid.`)
+    return false;
+  }
 };
 
-const findInvalidCards = (array2) => {
-    let invalidCards = [];
-    array2.forEach(function (value, i){
-        if(validateCard(value) === false){
-            invalidCards.push(value);
-        }
-    })
+const findInvalidCards = (a) => {
+  let invalidCards = [];
+  a.forEach(function (value, i) {
+    if (validateCard(value) === false) {
+      invalidCards.push(value);
+    }
+  });
+  return invalidCards;
 };
 
+const idInvalidCardCompanies = (a) => {
+  let invalidCards = findInvalidCards(a);
+  let lengthOfCards = invalidCards.length;
+  let i = lengthOfCards - 1;
+  let arrayOfCompaniesSorted = [];
 
-function idInvalidCardCompanies(array3){
-    let invalidCards = findInvalidCards(array3);
-    let lengthOfCards = invalidCards.length;
-    let i = lengthOfCards-1;
-    let arrayOfCompaniesSorted = [];
+  // arrays to hold each companies invalid cards (if any)
+  // amex starts 3
+  let amex = [];
+  // visa starts 4
+  let visa = [];
+  // mastercard starts 5
+  let mastercard = [];
+  // discover starts 6
+  let discover = [];
 
-    // arrays to hold each companies invalid cards (if any)
-    // amex starts 3
-    let amex = [];
-    // visa starts 4
-    let visa = [];
-    // mastercard starts 5
-    let mastercard = [];
-    // discover starts 6
-    let discover = [];
+  invalidCards.forEach(function (array, i) {
+    if (array[0] == 3) {
+      amex.push(array);
+    } else if (array[0] == 4) {
+      visa.push(array);
+    } else if (array[0] == 5) {
+      mastercard.push(array);
+    } else if (array[0] == 6) {
+      discover.push(array);
+    }
+  });
 
-    do {
-        switch(invalidCards[i][0]){
-            case(3):
-            amex.push(invalidCards[i])
-            break;
+  // return the card companies in one nested array
+  arrayOfCompaniesSorted.push("Amex:", amex);
+  arrayOfCompaniesSorted.push("Visa:", visa);
+  arrayOfCompaniesSorted.push("MasterCard:", mastercard);
+  arrayOfCompaniesSorted.push("Discover:", discover);
 
-            case(4):
-            visa.push(invalidCards[i])
-            break;
-
-            case(5):
-            mastercard.push(invalidCards[i])
-            break;
-
-            case(6):
-            discover.push(invalidCards[i])
-            break;
-        }
-        i--;          
-    } while (i >= 0);
-    
-    // return the card companies in one nested array
-    arrayOfCompaniesSorted.push(amex);
-    arrayOfCompaniesSorted.push(visa);
-    arrayOfCompaniesSorted.push(mastercard);
-    arrayOfCompaniesSorted.push(discover);
-
-    return arrayOfCompaniesSorted
+  return arrayOfCompaniesSorted;
 };
-  findInvalidCards(batch);
-  console.log(idInvalidCardCompanies(invalidCards));
+
+findInvalidCards(batch);
+console.log(idInvalidCardCompanies(batch));
+
  
