@@ -54,7 +54,6 @@ const findInvalidCards = (array2) => {
     array2.forEach(function (value, i){
         if(validateCard(value) === false){
             invalidCards.push(value);
-            return invalidCards;
         }
     })
 };
